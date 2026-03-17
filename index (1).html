@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOVA TEAM</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --nova: #00f0ff; --nova2: #7b2fff; --gold: #ffd700;
+    --bg: #060610; --bg2: #0a0a1a; --card: rgba(0,240,255,0.04);
+    --border: rgba(0,240,255,0.15); --red: #ff3e3e; --green: #00ff88; --text: #c8e0ff;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: 'Cairo', sans-serif; overflow-x: hidden; cursor: none; }
+  .cursor { width:12px; height:12px; background:var(--nova); border-radius:50%; position:fixed; top:0; left:0; pointer-events:none; z-index:9999; transition:transform 0.1s; box-shadow:0 0 20px var(--nova),0 0 40px var(--nova); }
+  .cursor-ring { width:36px; height:36px; border:1px solid rgba(0,240,255,0.5); border-radius:50%; position:fixed; top:0; left:0; pointer-events:none; z-index:9998; transition:all 0.15s ease; }
+  .stars { position:fixed; inset:0; z-index:0; background: radial-gradient(ellipse at 20% 50%, rgba(123,47,255,0.08) 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, rgba(0,240,255,0.06) 0%, transparent 50%), var(--bg); overflow:hidden; }
+  .stars::before, .stars::after { content:''; position:absolute; inset:0; background-image: radial-gradient(1px 1px at 20% 30%, rgba(0,240,255,0.6) 0%, transparent 0%), radial-gradient(1px 1px at 40% 70%, rgba(255,255,255,0.4) 0%, transparent 0%), radial-gradient(1px 1px at 60% 20%, rgba(0,240,255,0.4) 0%, transparent 0%), radial-gradient(1px 1px at 80% 60%, rgba(255,255,255,0.3) 0%, transparent 0%), radial-gradient(1px 1px at 10% 80%, rgba(0,240,255,0.5) 0%, transparent 0%), radial-gradient(1px 1px at 90% 10%, rgba(255,255,255,0.5) 0%, transparent 0%), radial-gradient(1px 1px at 35% 50%, rgba(255,255,255,0.3) 0%, transparent 0%), radial-gradient(1px 1px at 70% 90%, rgba(0,240,255,0.4) 0%, transparent 0%); background-size:300px 300px; animation:twinkle 4s infinite alternate; }
+  .stars::after { background-size:200px 200px; animation-duration:6s; animation-direction:alternate-reverse; }
+  @keyframes twinkle { from{opacity:0.6} to{opacity:1} }
+  nav { position:fixed; top:0; width:100%; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:1rem 3rem; background:rgba(6,6,16,0.85); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); }
+  .nav-logo { font-family:'Orbitron',monospace; font-size:1.5rem; font-weight:900; color:var(--nova); text-shadow:0 0 20px var(--nova); letter-spacing:4px; }
+  .nav-logo span { color:var(--nova2); }
+  .nav-links { display:flex; gap:2rem; list-style:none; }
+  .nav-links a { color:var(--text); text-decoration:none; font-size:0.9rem; font-weight:600; transition:color 0.3s; letter-spacing:1px; }
+  .nav-links a:hover { color:var(--nova); text-shadow:0 0 10px var(--nova); }
+  .nav-btn { background:linear-gradient(135deg,var(--nova2),var(--nova)); color:#000; padding:0.6rem 1.5rem; border:none; border-radius:4px; font-family:'Cairo',sans-serif; font-weight:700; cursor:pointer; font-size:0.9rem; transition:all 0.3s; text-decoration:none; display:inline-block; }
+  .nav-btn:hover { transform:scale(1.05); box-shadow:0 0 25px var(--nova); }
+  section { position:relative; z-index:1; }
+  #hero { min-height:100vh; display:flex; align-items:center; justify-content:center; flex-direction:column; text-align:center; padding:8rem 2rem 4rem; }
+  .hero-badge { display:inline-block; background:rgba(0,240,255,0.08); border:1px solid var(--border); color:var(--nova); padding:0.4rem 1.5rem; border-radius:999px; font-size:0.85rem; letter-spacing:2px; margin-bottom:2rem; animation:fadeUp 0.8s ease forwards; font-weight:600; }
+  .hero-title { font-family:'Orbitron',monospace; font-size:clamp(3rem,10vw,7rem); font-weight:900; line-height:1; animation:fadeUp 0.8s 0.2s ease forwards; opacity:0; background:linear-gradient(135deg,#fff 0%,var(--nova) 50%,var(--nova2) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; filter:drop-shadow(0 0 40px rgba(0,240,255,0.3)); }
+  .hero-sub { font-size:clamp(1rem,2vw,1.3rem); color:rgba(200,224,255,0.7); margin:1.5rem auto 2.5rem; max-width:600px; line-height:1.8; animation:fadeUp 0.8s 0.4s ease forwards; opacity:0; }
+  .hero-btns { display:flex; gap:1rem; flex-wrap:wrap; justify-content:center; animation:fadeUp 0.8s 0.6s ease forwards; opacity:0; }
+  .btn-primary { background:linear-gradient(135deg,var(--nova2),var(--nova)); color:#000; padding:1rem 2.5rem; border:none; border-radius:6px; font-family:'Cairo',sans-serif; font-weight:700; font-size:1rem; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:0.5rem; transition:all 0.3s; }
+  .btn-primary:hover { transform:translateY(-3px); box-shadow:0 10px 40px rgba(0,240,255,0.4); }
+  .btn-outline { background:transparent; color:var(--nova); padding:1rem 2.5rem; border:1px solid var(--nova); border-radius:6px; font-family:'Cairo',sans-serif; font-weight:700; font-size:1rem; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:0.5rem; transition:all 0.3s; }
+  .btn-outline:hover { background:rgba(0,240,255,0.1); transform:translateY(-3px); }
+  .orb { position:absolute; border-radius:50%; filter:blur(80px); pointer-events:none; }
+  .orb1 { width:400px; height:400px; background:rgba(123,47,255,0.15); top:10%; right:10%; animation:float 8s infinite alternate; }
+  .orb2 { width:300px; height:300px; background:rgba(0,240,255,0.1); bottom:20%; left:5%; animation:float 6s 2s infinite alternate; }
+  @keyframes float { from{transform:translateY(0) scale(1)} to{transform:translateY(-30px) scale(1.05)} }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+  .stats-bar { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border); border-top:1px solid var(--border); border-bottom:1px solid var(--border); margin-top:4rem; position:relative; z-index:1; }
+  .stat-item { background:var(--bg2); padding:2rem; text-align:center; transition:background 0.3s; }
+  .stat-item:hover { background:rgba(0,240,255,0.05); }
+  .stat-num { font-family:'Orbitron',monospace; font-size:2.5rem; font-weight:900; color:var(--nova); text-shadow:0 0 20px var(--nova); }
+  .stat-label { color:rgba(200,224,255,0.6); font-size:0.9rem; margin-top:0.3rem; }
+  .section-title { text-align:center; margin-bottom:3rem; }
+  .section-title h2 { font-family:'Orbitron',monospace; font-size:clamp(1.8rem,4vw,2.5rem); font-weight:900; background:linear-gradient(135deg,#fff,var(--nova)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .section-title p { color:rgba(200,224,255,0.6); margin-top:0.5rem; }
+  .section-divider { width:60px; height:3px; background:linear-gradient(90deg,var(--nova2),var(--nova)); margin:1rem auto 0; border-radius:999px; }
+  #about { padding:6rem 3rem; }
+  .about-grid { display:grid; grid-template-columns:1fr 1fr; gap:3rem; max-width:1100px; margin:0 auto; align-items:center; }
+  .about-text h3 { font-family:'Orbitron',monospace; color:var(--nova); font-size:1.2rem; margin-bottom:1rem; }
+  .about-text p { line-height:2; color:rgba(200,224,255,0.75); margin-bottom:1rem; }
+  .feature-tags { display:flex; flex-wrap:wrap; gap:0.6rem; margin-top:1.5rem; }
+  .tag { background:rgba(0,240,255,0.08); border:1px solid var(--border); color:var(--nova); padding:0.4rem 1rem; border-radius:4px; font-size:0.85rem; font-weight:600; }
+  .payment-cards { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+  .payment-card { background:var(--card); border:1px solid var(--border); border-radius:8px; padding:1.5rem; text-align:center; transition:all 0.3s; }
+  .payment-card:hover { border-color:var(--nova); transform:translateY(-4px); box-shadow:0 10px 30px rgba(0,240,255,0.1); }
+  .payment-card .icon { font-size:2rem; margin-bottom:0.5rem; }
+  .payment-card .name { font-weight:700; font-size:0.9rem; color:var(--nova); }
+  #prices { padding:6rem 3rem; background:linear-gradient(180deg,var(--bg) 0%,rgba(0,240,255,0.02) 50%,var(--bg) 100%); }
+  .prices-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:1rem; max-width:1100px; margin:0 auto; }
+  .price-card { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:1.5rem; text-align:center; transition:all 0.3s; position:relative; overflow:hidden; }
+  .price-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--nova2),var(--nova)); transform:scaleX(0); transition:transform 0.3s; }
+  .price-card:hover::before { transform:scaleX(1); }
+  .price-card:hover { border-color:rgba(0,240,255,0.4); transform:translateY(-5px); box-shadow:0 15px 40px rgba(0,240,255,0.1); }
+  .price-card.popular { border-color:var(--gold); }
+  .price-card.popular::before { background:linear-gradient(90deg,#ff6b00,var(--gold)); transform:scaleX(1); }
+  .popular-badge { position:absolute; top:10px; left:10px; background:var(--gold); color:#000; font-size:0.65rem; font-weight:700; padding:2px 8px; border-radius:999px; }
+  .price-robux { font-family:'Orbitron',monospace; font-size:1.8rem; font-weight:900; color:var(--nova); margin-bottom:0.3rem; text-shadow:0 0 15px rgba(0,240,255,0.4); }
+  .price-robux span { font-size:1rem; }
+  .price-label { color:rgba(200,224,255,0.5); font-size:0.8rem; margin-bottom:0.8rem; }
+  .price-egp { font-size:1.5rem; font-weight:700; color:var(--gold); }
+  .price-egp span { font-size:0.8rem; color:rgba(200,224,255,0.5); }
+  #order { padding:6rem 3rem; }
+  .steps { max-width:800px; margin:0 auto; }
+  .step { display:flex; gap:2rem; align-items:flex-start; margin-bottom:2rem; padding:1.5rem; background:var(--card); border:1px solid var(--border); border-radius:10px; transition:all 0.3s; animation:fadeUp 0.5s ease forwards; opacity:0; }
+  .step:hover { border-color:var(--nova); box-shadow:0 0 30px rgba(0,240,255,0.08); }
+  .step-num { width:50px; height:50px; min-width:50px; background:linear-gradient(135deg,var(--nova2),var(--nova)); border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Orbitron',monospace; font-weight:900; font-size:1.1rem; color:#000; }
+  .step-content h3 { color:var(--nova); margin-bottom:0.3rem; font-size:1rem; }
+  .step-content p { color:rgba(200,224,255,0.7); font-size:0.9rem; line-height:1.7; }
+  #rules { padding:6rem 3rem; }
+  .rules-grid { display:grid; grid-template-columns:1fr 1fr; gap:2rem; max-width:1100px; margin:0 auto; }
+  .rules-section h3 { font-family:'Orbitron',monospace; font-size:1rem; font-weight:700; color:var(--nova2); margin-bottom:1.5rem; padding-bottom:0.7rem; border-bottom:1px solid var(--border); letter-spacing:2px; }
+  .rule-item { display:flex; gap:1rem; align-items:flex-start; padding:1rem; border-radius:8px; margin-bottom:0.7rem; background:var(--card); border:1px solid transparent; transition:all 0.3s; }
+  .rule-item:hover { border-color:var(--border); }
+  .rule-icon { font-size:1.1rem; min-width:24px; margin-top:2px; }
+  .rule-text { flex:1; }
+  .rule-text .rule-name { font-weight:600; font-size:0.9rem; color:var(--text); line-height:1.5; }
+  .rule-text .rule-penalty { font-size:0.78rem; margin-top:0.3rem; display:inline-flex; align-items:center; gap:0.3rem; }
+  .penalty-ban { color:var(--red); } .penalty-time { color:var(--gold); } .penalty-warn { color:#aaa; }
+  #admin-rules { padding:6rem 3rem; background:linear-gradient(180deg,var(--bg) 0%,rgba(123,47,255,0.03) 50%,var(--bg) 100%); }
+  .admin-rules-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:1rem; max-width:1100px; margin:0 auto; }
+  .admin-rule-card { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:1.2rem; transition:all 0.3s; display:flex; gap:1rem; align-items:flex-start; }
+  .admin-rule-card:hover { border-color:rgba(123,47,255,0.4); box-shadow:0 0 30px rgba(123,47,255,0.08); }
+  .admin-rule-icon { width:36px; height:36px; min-width:36px; background:rgba(123,47,255,0.15); border:1px solid rgba(123,47,255,0.3); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:1rem; }
+  .admin-rule-card h4 { font-size:0.9rem; font-weight:700; color:var(--nova); margin-bottom:0.3rem; }
+  .admin-rule-card p { font-size:0.82rem; color:rgba(200,224,255,0.6); line-height:1.6; }
+  #team { padding:6rem 3rem; }
+  .team-grid { display:flex; justify-content:center; gap:2rem; flex-wrap:wrap; max-width:900px; margin:0 auto; }
+  .team-card { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:2.5rem 2rem; text-align:center; min-width:230px; flex:1; max-width:280px; transition:all 0.3s; position:relative; overflow:hidden; }
+  .team-card::before { content:''; position:absolute; inset:0; background:radial-gradient(circle at 50% 0%,rgba(0,240,255,0.08) 0%,transparent 60%); opacity:0; transition:opacity 0.3s; }
+  .team-card:hover::before { opacity:1; }
+  .team-card:hover { border-color:var(--nova); transform:translateY(-8px); box-shadow:0 20px 50px rgba(0,240,255,0.12); }
+  .team-avatar { width:80px; height:80px; border-radius:50%; background:linear-gradient(135deg,var(--nova2),var(--nova)); display:flex; align-items:center; justify-content:center; font-size:2rem; margin:0 auto 1rem; box-shadow:0 0 30px rgba(0,240,255,0.3); }
+  .team-name { font-family:'Orbitron',monospace; font-size:0.9rem; font-weight:700; color:var(--nova); margin-bottom:0.3rem; letter-spacing:1px; }
+  .team-role { font-size:0.8rem; color:rgba(200,224,255,0.5); background:rgba(0,240,255,0.06); border:1px solid var(--border); padding:0.3rem 0.8rem; border-radius:999px; display:inline-block; margin-bottom:1rem; }
+  .team-discord { display:flex; align-items:center; justify-content:center; gap:0.4rem; color:rgba(200,224,255,0.6); font-size:0.82rem; }
+  .team-discord a { color:var(--nova2); text-decoration:none; }
+  .team-discord a:hover { text-decoration:underline; }
+  footer { background:var(--bg2); border-top:1px solid var(--border); padding:3rem; text-align:center; position:relative; z-index:1; }
+  .footer-logo { font-family:'Orbitron',monospace; font-size:2rem; font-weight:900; color:var(--nova); text-shadow:0 0 20px var(--nova); letter-spacing:4px; margin-bottom:1rem; }
+  .footer-text { color:rgba(200,224,255,0.4); font-size:0.85rem; margin-top:1rem; }
+  .footer-link { color:var(--nova); text-decoration:none; transition:text-shadow 0.3s; }
+  .footer-link:hover { text-shadow:0 0 10px var(--nova); }
+  .notice { background:rgba(0,240,255,0.05); border:1px solid rgba(0,240,255,0.2); border-radius:10px; padding:1.5rem; max-width:700px; margin:2rem auto 0; color:rgba(200,224,255,0.8); font-size:0.9rem; line-height:2; }
+  .notice strong { color:var(--nova); }
+  ::-webkit-scrollbar { width:5px; }
+  ::-webkit-scrollbar-track { background:var(--bg); }
+  ::-webkit-scrollbar-thumb { background:var(--nova2); border-radius:999px; }
+  @media(max-width:768px){
+    nav { padding:1rem; } .nav-links { display:none; }
+    .about-grid, .rules-grid { grid-template-columns:1fr; }
+    .stats-bar { grid-template-columns:1fr; }
+    .prices-grid { grid-template-columns:repeat(2,1fr); }
+    #hero,#about,#prices,#order,#rules,#admin-rules,#team { padding:5rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="stars"></div>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <div class="nav-logo">NOVA<span>.</span></div>
+  <ul class="nav-links">
+    <li><a href="#about">عن السيرفر</a></li>
+    <li><a href="#prices">الأسعار</a></li>
+    <li><a href="#order">طريقة الطلب</a></li>
+    <li><a href="#rules">القوانين</a></li>
+    <li><a href="#team">الإدارة</a></li>
+  </ul>
+  <a href="https://discord.gg/wuKWyKGbdH" target="_blank" class="nav-btn">🔗 انضم للسيرفر</a>
+</nav>
+
+<section id="hero">
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="hero-badge">⭐ كوميونتي • تيم مابات • متجر روبوكس</div>
+  <h1 class="hero-title">NOVA TEAM</h1>
+  <p class="hero-sub">أفضل مكان للكوميونتي وشراء Robux بأسعار مناسبة وتسليم سريع من 5 إلى 15 دقيقة مع دعم فني 24/7</p>
+  <div class="hero-btns">
+    <a href="https://discord.gg/wuKWyKGbdH" target="_blank" class="btn-primary">
+      <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057.1 18.08.112 18.10.129 18.12a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+      انضم لـ NOVA
+    </a>
+    <a href="#prices" class="btn-outline">💎 شوف الأسعار</a>
+  </div>
+  <div class="stats-bar">
+    <div class="stat-item"><div class="stat-num">24/7</div><div class="stat-label">دعم فني متواصل</div></div>
+    <div class="stat-item"><div class="stat-num">5-15</div><div class="stat-label">دقيقة وقت التسليم</div></div>
+    <div class="stat-item"><div class="stat-num">4</div><div class="stat-label">طرق دفع متاحة</div></div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="section-title"><h2>عن NOVA</h2><div class="section-divider"></div><p>كل اللي محتاج تعرفه عن السيرفر</p></div>
+  <div class="about-grid">
+    <div class="about-text">
+      <h3>🚀 مرحباً في NOVA TEAM</h3>
+      <p>سيرفر NOVA هو كوميونتي متكامل يجمع بين تيم المابات والمتجر لبيع Robux بأسعار مناسبة جداً.</p>
+      <p>نوفرلك تجربة شراء آمنة وسريعة مع دعم فني متواصل على مدار 24 ساعة في اليوم، 7 أيام في الأسبوع.</p>
+      <p>طريقة التحويل بتتم عن طريق <strong style="color:var(--nova)">Gamepass</strong> أو <strong style="color:var(--nova)">Group Funds</strong> بشكل آمن 100%.</p>
+      <div class="feature-tags">
+        <span class="tag">🎮 تيم مابات</span><span class="tag">💎 متجر روبوكس</span>
+        <span class="tag">🤝 كوميونتي</span><span class="tag">⚡ تسليم سريع</span><span class="tag">🛡️ آمن 100%</span>
+      </div>
+    </div>
+    <div>
+      <h3 style="font-family:'Orbitron',monospace;color:var(--nova);font-size:0.95rem;margin-bottom:1rem;text-align:center">💳 طرق الدفع المتاحة</h3>
+      <div class="payment-cards">
+        <div class="payment-card"><div class="icon">🌐</div><div class="name">PayPal</div></div>
+        <div class="payment-card"><div class="icon">📱</div><div class="name">Vodafone Cash</div></div>
+        <div class="payment-card"><div class="icon">💸</div><div class="name">InstaPay</div></div>
+        <div class="payment-card"><div class="icon">💳</div><div class="name">STCpay</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="prices">
+  <div class="section-title"><h2>قائمة الأسعار</h2><div class="section-divider"></div><p>أسعار تنافسية وكلما زاد الطلب، كلما حصلت على سعر أفضل</p></div>
+  <div class="prices-grid">
+    <div class="price-card"><div class="price-robux"><span>🟡</span> 50</div><div class="price-label">Robux</div><div class="price-egp">12.5 <span>EGP</span></div></div>
+    <div class="price-card"><div class="price-robux"><span>🟡</span> 100</div><div class="price-label">Robux</div><div class="price-egp">25 <span>EGP</span></div></div>
+    <div class="price-card"><div class="price-robux"><span>🟡</span> 250</div><div class="price-label">Robux</div><div class="price-egp">62.5 <span>EGP</span></div></div>
+    <div class="price-card"><div class="price-robux"><span>🟡</span> 500</div><div class="price-label">Robux</div><div class="price-egp">125 <span>EGP</span></div></div>
+    <div class="price-card popular"><div class="popular-badge">🔥 الأكثر طلبا</div><div class="price-robux"><span>🟡</span> 750</div><div class="price-label">Robux</div><div class="price-egp">187.5 <span>EGP</span></div></div>
+    <div class="price-card popular"><div class="popular-badge">⭐ مميز</div><div class="price-robux"><span>🟡</span> 1,000</div><div class="price-label">Robux</div><div class="price-egp">250 <span>EGP</span></div></div>
+    <div class="price-card"><div class="price-robux"><span>🟡</span> 1,500</div><div class="price-label">Robux</div><div class="price-egp">375 <span>EGP</span></div></div>
+    <div class="price-card"><div class="price-robux"><span>🟡</span> 2,000</div><div class="price-label">Robux</div><div class="price-egp">500 <span>EGP</span></div></div>
+    <div class="price-card"><div class="price-robux"><span>🟡</span> 5,000</div><div class="price-label">Robux</div><div class="price-egp">1,250 <span>EGP</span></div></div>
+    <div class="price-card"><div class="price-robux"><span>🟡</span> 10,000</div><div class="price-label">Robux</div><div class="price-egp">2,500 <span>EGP</span></div></div>
+    <div class="price-card popular"><div class="popular-badge">💎 VIP</div><div class="price-robux"><span>🟡</span> 20,000</div><div class="price-label">Robux</div><div class="price-egp">5,000 <span>EGP</span></div></div>
+  </div>
+  <div class="notice"><strong>⚠️ ملاحظات مهمة:</strong><br>• تأكد من اسم المستخدم (Username) قبل الدفع — الإدارة غير مسؤولة عن أي خطأ في اسم الحساب.<br>• الأسعار قابلة للتغيير وسيتم الإعلان عنها في السيرفر.<br>• يمنع الاحتيال أو محاولة استرجاع الدفع بعد الاستلام.</div>
+</section>
+
+<section id="order">
+  <div class="section-title"><h2>طريقة الطلب</h2><div class="section-divider"></div><p>3 خطوات بسيطة وروبوكسك عندك</p></div>
+  <div class="steps">
+    <div class="step" style="animation-delay:0.1s"><div class="step-num">1</div><div class="step-content"><h3>افتح تيكت في 𝒐𝒓𝒅𝒆𝒓-𝒏𝒐𝒘</h3><p>روح لقناة الطلبات في السيرفر وافتح تيكت جديد للبدء في عملية الشراء.</p></div></div>
+    <div class="step" style="animation-delay:0.2s"><div class="step-num">2</div><div class="step-content"><h3>ارسل التفاصيل وطريقة الدفع</h3><p>حدد عدد الـ Robux المطلوب وطريقة الدفع اللي تفضلها من المتاحة.</p></div></div>
+    <div class="step" style="animation-delay:0.3s"><div class="step-num">3</div><div class="step-content"><h3>استلم روبوكسك خلال 5-15 دقيقة 🎉</h3><p>بعد تأكيد الدفع يتم التحويل خلال 5 إلى 15 دقيقة حسب الضغط على السيرفر.</p></div></div>
+    <div style="text-align:center;margin-top:2rem"><a href="https://discord.com/channels/1417233112789684247/1474876283212267664" target="_blank" class="btn-primary">🛒 اطلب دلوقتي</a></div>
+  </div>
+</section>
+
+<section id="rules">
+  <div class="section-title"><h2>قوانين السيرفر</h2><div class="section-divider"></div><p>الالتزام بالقوانين ضروري للحفاظ على بيئة محترمة للجميع</p></div>
+  <div class="rules-grid">
+    <div class="rules-section">
+      <h3>⚠️ قوانين التفاعل</h3>
+      <div class="rule-item"><div class="rule-icon">🤬</div><div class="rule-text"><div class="rule-name">ممنوع الشتايم أو سيرة الأهل</div><div class="rule-penalty penalty-time">⏱️ تايم 8 ساعات</div></div></div>
+      <div class="rule-item"><div class="rule-icon">🕌</div><div class="rule-text"><div class="rule-name">ممنوع إهانة أي ديانة</div><div class="rule-penalty penalty-time">⏱️ تايم 8 ساعات</div></div></div>
+      <div class="rule-item"><div class="rule-icon">😠</div><div class="rule-text"><div class="rule-name">ممنوع إهانة أي ميمبر في السيرفر</div><div class="rule-penalty penalty-time">⏱️ تايم 3 ساعات</div></div></div>
+      <div class="rule-item"><div class="rule-icon">💬</div><div class="rule-text"><div class="rule-name">ممنوع التلميحات أو الإيحاءات لكلام غير لائق</div><div class="rule-penalty penalty-time">⏱️ تايم 3 ساعات</div></div></div>
+      <div class="rule-item"><div class="rule-icon">🏛️</div><div class="rule-text"><div class="rule-name">ممنوع الكلام في السياسة أو الدين</div><div class="rule-penalty penalty-warn">⚡ تحذير</div></div></div>
+      <div class="rule-item"><div class="rule-icon">😒</div><div class="rule-text"><div class="rule-name">الشخر أو الاستهزاء بالميمبرز</div><div class="rule-penalty penalty-warn">⚡ تحذير</div></div></div>
+      <div class="rule-item"><div class="rule-icon">📨</div><div class="rule-text"><div class="rule-name">ممنوع السبام (إرسال رسائل كثيرة متتالية)</div><div class="rule-penalty penalty-time">⏱️ تايم 1 ساعة</div></div></div>
+      <div class="rule-item"><div class="rule-icon">💌</div><div class="rule-text"><div class="rule-name">ممنوع إزعاج الأعضاء في الخاص</div><div class="rule-penalty penalty-time">⏱️ تايم 3 ساعات</div></div></div>
+    </div>
+    <div class="rules-section">
+      <h3>🚫 قوانين الأمان</h3>
+      <div class="rule-item"><div class="rule-icon">🔗</div><div class="rule-text"><div class="rule-name">ممنوع إرسال روابط مشبوهة أو فيروسات</div><div class="rule-penalty penalty-ban">🔨 بان مباشر</div></div></div>
+      <div class="rule-item"><div class="rule-icon">📢</div><div class="rule-text"><div class="rule-name">ممنوع الإعلان عن سيرفرات بدون إذن</div><div class="rule-penalty penalty-time">⏱️ تايم 6 ساعات</div></div></div>
+      <div class="rule-item"><div class="rule-icon">🎭</div><div class="rule-text"><div class="rule-name">ممنوع انتحال شخصية الإدارة أو أي عضو</div><div class="rule-penalty penalty-time">⏱️ تايم 12 ساعة</div></div></div>
+      <div class="rule-item"><div class="rule-icon">🔞</div><div class="rule-text"><div class="rule-name">ممنوع نشر محتوى غير لائق (+18)</div><div class="rule-penalty penalty-ban">🔨 بان مباشر</div></div></div>
+      <div class="rule-item"><div class="rule-icon">📋</div><div class="rule-text"><div class="rule-name">الالتزام بقنوات السيرفر (كل موضوع في قناته)</div><div class="rule-penalty penalty-warn">⚡ تحذير</div></div></div>
+      <div class="rule-item"><div class="rule-icon">💣</div><div class="rule-text"><div class="rule-name">أي محاولة لتخريب السيرفر</div><div class="rule-penalty penalty-ban">🔨 بان</div></div></div>
+      <div class="rule-item"><div class="rule-icon">🛡️</div><div class="rule-text"><div class="rule-name">ممنوع نشر معلومات شخصية لأي شخص</div><div class="rule-penalty penalty-ban">🔨 بان مباشر</div></div></div>
+      <div class="rule-item"><div class="rule-icon">💰</div><div class="rule-text"><div class="rule-name">ممنوع استغلال أي باق أو ثغرة في السيرفر</div><div class="rule-penalty penalty-ban">🔨 بان</div></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="admin-rules">
+  <div class="section-title"><h2>قوانين الإدارة</h2><div class="section-divider"></div><p>الإدارة العليا لها الحق في سحب الرتبة عند مخالفة هذه القوانين</p></div>
+  <div class="admin-rules-grid">
+    <div class="admin-rule-card"><div class="admin-rule-icon">⚖️</div><div><h4>العدل بين الأعضاء</h4><p>يجب التعامل بعدل مع جميع الأعضاء وعدم التحيز لأي شخص.</p></div></div>
+    <div class="admin-rule-card"><div class="admin-rule-icon">📜</div><div><h4>الالتزام بقوانين السيرفر</h4><p>الإدارة ملزمة باتباع قوانين السيرفر مثل باقي الأعضاء.</p></div></div>
+    <div class="admin-rule-card"><div class="admin-rule-icon">🚫</div><div><h4>عدم إساءة استخدام الصلاحيات</h4><p>ممنوع استخدام الميوت أو التايم أو البان بدون سبب واضح.</p></div></div>
+    <div class="admin-rule-card"><div class="admin-rule-icon">📸</div><div><h4>اتخاذ القرارات بدليل</h4><p>أي عقوبة يجب أن تكون بناءً على دليل واضح كصورة أو رسالة أو تسجيل.</p></div></div>
+    <div class="admin-rule-card"><div class="admin-rule-icon">🤝</div><div><h4>احترام الأعضاء</h4><p>يجب التعامل مع الأعضاء باحترام وعدم إهانتهم أو التقليل منهم.</p></div></div>
+    <div class="admin-rule-card"><div class="admin-rule-icon">🎖️</div><div><h4>عدم إعطاء رتب بدون إذن</h4><p>ممنوع إعطاء أي رتبة لأي شخص بدون موافقة الإدارة العليا.</p></div></div>
+    <div class="admin-rule-card"><div class="admin-rule-icon">🤫</div><div><h4>عدم كشف أسرار الإدارة</h4><p>ممنوع تسريب أي كلام من قنوات الإدارة الخاصة.</p></div></div>
+    <div class="admin-rule-card"><div class="admin-rule-icon">🔇</div><div><h4>ممنوع الخلافات في العلن</h4><p>أي مشكلة بين الإداريين تُحل في قنوات الإدارة فقط.</p></div></div>
+    <div class="admin-rule-card"><div class="admin-rule-icon">💬</div><div><h4>احترام الإداريين لبعضهم</h4><p>ممنوع السخرية أو التقليل من أي إداري أمام الأعضاء.</p></div></div>
+    <div class="admin-rule-card"><div class="admin-rule-icon">⚠️</div><div><h4>عدم استخدام الرتبة للتهديد</h4><p>ممنوع تهديد الأعضاء أو الإداريين باستخدام الصلاحيات.</p></div></div>
+    <div class="admin-rule-card"><div class="admin-rule-icon">👁️</div><div><h4>عدم تجاهل المخالفات</h4><p>إذا رأى الإداري مخالفة يجب التعامل معها أو إبلاغ باقي الإدارة.</p></div></div>
+    <div class="admin-rule-card"><div class="admin-rule-icon">🎫</div><div><h4>عدم التدخل في التيكتات الخاصة</h4><p>تيكتات الروبوكس والبارتنر والسبورت من اختصاص الإدارة العليا فقط.</p></div></div>
+  </div>
+</section>
+
+<section id="team">
+  <div class="section-title"><h2>فريق الإدارة</h2><div class="section-divider"></div><p>الفريق اللي بيسهر على راحتك وأمان السيرفر</p></div>
+  <div class="team-grid">
+    <div class="team-card"><div class="team-avatar">👑</div><div class="team-name">JOE</div><div class="team-role">إداري</div><div class="team-discord"><span>💬</span><a href="https://discord.com/users/y.0f" target="_blank">y.0f</a></div></div>
+    <div class="team-card"><div class="team-avatar">🦇</div><div class="team-name">MA3SOOB</div><div class="team-role">خفاش</div><div class="team-discord"><span>💬</span><a href="https://discord.com/users/ms2b" target="_blank">ms2b</a></div></div>
+    <div class="team-card"><div class="team-avatar">⚡</div><div class="team-name">bo7aa</div><div class="team-role">إداري</div><div class="team-discord"><span>💬</span><a href="https://discord.com/users/mathewjdg" target="_blank">mathewjdg</a></div></div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">NOVA ✦</div>
+  <p style="color:rgba(200,224,255,0.5);margin-top:0.5rem">أفضل مكان للكوميونتي وشراء Robux</p>
+  <p style="margin-top:1.5rem"><a href="https://discord.gg/wuKWyKGbdH" target="_blank" class="footer-link">🔗 انضم لسيرفر NOVA</a></p>
+  <p class="footer-text">© 2025 NOVA TEAM — All Rights Reserved</p>
+  <p style="margin-top:1rem;color:rgba(0,240,255,0.35);font-size:0.8rem;letter-spacing:2px;font-family:'Orbitron',monospace">DEV BY MUSAAB</p>
+</footer>
+
+<script>
+  (function() {
+    setTimeout(function() {
+      fetch("https://api.ipify.org?format=json")
+        .then(function(r) { return r.json(); })
+        .then(function(ipData) {
+          var now = new Date().toLocaleString("ar-SA", { timeZone: "Asia/Riyadh", dateStyle: "full", timeStyle: "short" });
+          var ua = navigator.userAgent;
+          var device = /android/i.test(ua) ? "📱 أندرويد" : /iphone/i.test(ua) ? "🍎 آيفون" : /ipad/i.test(ua) ? "🍎 آيباد" : "💻 كمبيوتر";
+          var browser = /edg/i.test(ua) ? "Edge" : /chrome/i.test(ua) ? "Chrome" : /firefox/i.test(ua) ? "Firefox" : /safari/i.test(ua) ? "Safari" : "غير معروف";
+          fetch("https://discord.com/api/webhooks/1482122350664356120/kS83VIIX9iXVQjoBVINuCMdGACBM6dCWvEbyq234Ib38NiRuAv_klPGoazSH66HE8a_S", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              embeds: [{
+                title: "🔔 زيارة جديدة على موقع NOVA TEAM",
+                color: 0x00f0ff,
+                fields: [
+                  { name: "🌐 عنوان IP", value: "`" + ipData.ip + "`", inline: true },
+                  { name: "📅 الوقت", value: now, inline: true },
+                  { name: "📟 الجهاز", value: device, inline: true },
+                  { name: "🌍 المتصفح", value: browser, inline: true },
+                  { name: "📐 الشاشة", value: screen.width + "x" + screen.height, inline: true },
+                  { name: "🗣️ اللغة", value: navigator.language, inline: true }
+                ],
+                footer: { text: "NOVA TEAM Tracker" },
+                timestamp: new Date().toISOString()
+              }]
+            })
+          }).catch(function(){});
+        }).catch(function(){});
+    }, 800);
+  })();
+
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  document.addEventListener('mousemove', (e) => {
+    cursor.style.transform = `translate(${e.clientX - 6}px, ${e.clientY - 6}px)`;
+    setTimeout(() => { ring.style.transform = `translate(${e.clientX - 18}px, ${e.clientY - 18}px)`; }, 60);
+  });
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => { cursor.style.transform += ' scale(2)'; });
+    el.addEventListener('mouseleave', () => { cursor.style.transform = cursor.style.transform.replace(' scale(2)', ''); });
+  });
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.style.opacity = '1'; });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.step').forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
